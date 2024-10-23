@@ -90,6 +90,7 @@ class RegistrarController {
 
 
     public function sortearAmigoController() {
+        // Recupera a lista de nomes
         $nomes = $this->model->listarNomes(); 
         $sorteados = [];
         $message = ""; 
@@ -98,25 +99,26 @@ class RegistrarController {
             if (!empty($nomes)) {
                 $nomesEmbaralhados = $nomes;
                 shuffle($nomesEmbaralhados);
-    
+        
                 $jaSorteados = [];
-    
+        
                 for ($i = 0; $i < count($nomes); $i++) {
                     do {
                         $sorteado = $nomesEmbaralhados[$i % count($nomes)];
-                    } while ($sorteado === $nomes[$i] || in_array($sorteado, $jaSorteados)); 
-    
+                    } while ($sorteado === $nomes[$i] || in_array($sorteado, $jaSorteados)); // Garante que não sorteie a si mesmo e que não seja repetido
+        
                     $sorteados[$nomes[$i]] = $sorteado; 
                     $jaSorteados[] = $sorteado; 
+                } 
                 $message = "Sorteio realizado com sucesso!";
-            } 
-
-        }else {
-            $message = "Nenhum amigo cadastrado para sortear.";
+            } else {
+                $message = "Nenhum amigo cadastrado para sortear.";
+            }
         }
-            include '../views/Home.php';
-        }
+    
+        include '../views/Home.php';
     }
+    
         
     public function excluirAmigoController() {
         $message = "";
