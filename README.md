@@ -48,7 +48,8 @@ Este projeto é um sistema de amigo secreto, onde os usuários podem cadastrar a
 Clone o repositório:
 
   git clone https://github.com/Joaohvr1/PHP-DesafioDoAmigoSecreto.git
-  cd PHP-DesafioDoAmigoSecreto
+  
+    cd PHP-DesafioDoAmigoSecreto
 
   Instale o XAMPP, PHPMYADMIN ou algum outro software que consiga fazer algum servidor local de sua preferencia.
   Necessário ter um banco de dados.
