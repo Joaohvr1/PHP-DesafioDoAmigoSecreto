@@ -1,12 +1,3 @@
-<?php
-    require_once '../controllers/AmigoController.php';
-    $DB = require_once '../config/database.php';
-
-    $controller = new AmigoController($DB);
-    $controller->registrarAmigoController(); // Processa o registro
-?>
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -21,15 +12,19 @@
         <form method="POST" action="">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" required>
+                <input type="text" class="form-control" id="nome" name="nome" value="<?php echo htmlspecialchars($nome); ?>" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" required>
             </div>
-            <button type="submit" class="btn btn-primary">Registrar Amigo</button>
+            <button type="submit" class="btn btn-primary" <?php echo $isFormValid ? '' : 'disabled'; ?>>Registrar Amigo</button>
         </form>
-        <?php if (isset($message)) echo "<div class='alert alert-info mt-3'>$message</div>"; ?>
+        <?php if (!empty($message)): ?>
+            <div class="alert <?php echo $isFormValid ? 'alert-success' : 'alert-danger'; ?> mt-3">
+                <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
     </div>
 </body>
 </html>
