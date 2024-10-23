@@ -126,7 +126,7 @@ class RegistrarController {
             $message = $result ? "Amigo excluído com sucesso!" : "Erro ao excluir amigo.";
         }
 
-        header("Location: ../views/Sortear.php");
+        header("Location: ./index.php");
     }
 }
 ?>
