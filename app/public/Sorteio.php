@@ -11,7 +11,6 @@
 
     $controller = new AmigoController($db);
 
-    // Verifica a ação a ser executada
     $action = isset($_GET['action']) ? $_GET['action'] : 'listarAmigos';
     switch ($action) {
         case 'realizarSorteio':

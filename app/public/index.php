@@ -1,5 +1,4 @@
 <?php
-// Conectando ao banco de dados
 $db = new mysqli("localhost", "root", "root", "amigosecreto");
 
 
@@ -8,10 +7,8 @@ if ($db->connect_error) {
 }
 
 
-// Inclui o controlador
-require_once '../controllers/AmigoController.php';
+require_once '../controllers/HomeController.php';
 
-// Instancia o controlador
-$controller = new AmigoController($db);
+$controller = new HomeController($db);
 $controller->listarAmigosController();
 ?>

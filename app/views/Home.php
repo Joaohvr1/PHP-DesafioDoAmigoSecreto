@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amigo Secreto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/home.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -20,10 +20,10 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../public/registrar.php">Registrar Amigos</a>
+                        <a class="nav-link" href="../public/Registrar.php">Registrar Amigos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Sortear.php">Sortear Amigo Secreto</a>
+                        <a class="nav-link" href="../public/sorteio.php">Sortear Amigo Secreto</a>
                     </li>
                 </ul>
             </div>
@@ -31,6 +31,12 @@
     </nav>
 
     <div class="container mt-5">
+        <?php if (!empty($message)): ?>
+            <div class="alert alert-info">
+                <?= htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
+
         <h2>Buscar Amigo</h2>
         <form method="GET" action="">
             <div class="input-group mb-3">
@@ -39,29 +45,21 @@
             </div>
         </form>
 
-        <h2>Lista de Amigos</h2>
-        <form method="POST" action="../controllers/AmigoController.php?action=realizarSorteioController">
-            <button type="submit" class="btn btn-success mb-3">Sortear</button>
+        <form method="POST" action="">
+            <button type="submit" name="sortear" class="btn btn-success mb-3">Sortear</button>
         </form>
 
+        <h2>Lista de Amigos</h2>
         <ul class="list-group">
-            <?php
-            if (isset($_GET['search'])) {
-                $searchTerm = trim($_GET['search']);
-                $nomes = $this->model->buscarAmigos($searchTerm);
-            } else {
-                $nomes = $this->model->listarNomes();
-            }
-
-            if (!empty($nomes)): ?>
+            <?php if (!empty($nomes)): ?>
                 <?php foreach ($nomes as $index => $nome): ?>
-                    <li class="list-group-item <?php echo ($index % 2 == 0) ? 'bg-light' : 'bg-secondary'; ?>">
-                        <?php echo htmlspecialchars($nome); ?>
+                    <li class="list-group-item <?= ($index % 2 == 0) ? 'bg-light' : 'bg-secondary'; ?>">
+                        <?= htmlspecialchars($nome); ?>
                         <div class="float-end">
-                            <a href="../public/editar.php?nome=<?php echo urlencode($nome); ?>" class="btn btn-warning btn-sm me-1">Editar</a>
-                            <form method="POST" action="../controllers/AmigoController.php?action=excluir" class="d-inline">
-                                <input type="hidden" name="nome" value="<?php echo htmlspecialchars($nome); ?>">
-                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                        <a href="../public/editar.php?nome=<?= urlencode($nome); ?>" class="btn btn-warning btn-sm me-1">Editar</a>
+                            <form method="POST" action="../public/excluir.php" class="d-inline">
+                                <input type="hidden" name="nome" value="<?= htmlspecialchars($nome); ?>">
+                                <button type="submit" name="excluir" class="btn btn-danger btn-sm">Excluir</button>
                             </form>
                         </div>
                     </li>

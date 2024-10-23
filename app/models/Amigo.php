@@ -2,7 +2,6 @@
 class Amigo {
     private $DB;
 
-    // O construtor deve receber a conexão como parâmetro
     public function __construct($dbConnection) {
         $this->DB = $dbConnection; 
     }
@@ -24,8 +23,45 @@ class Amigo {
         }
     }
 
+    public function editarAmigos($nome, $email){
+
+        $sqlQuery = "UPDATE sorteio SET nome, email = $nome, $email";
+        $stmt = $this->DB->prepare($sqlQuery);
+        if (!$stmt) {
+            return "Erro ao preparar dados para UPDATE". $this->DB->error;
+        }
+        $stmt->bind_param("ss", $nome, $email);
+
+        if ($stmt->execute()) {
+            return "Amigo atualizado com sucesso";
+        } else {
+            return "Erro: ". $stmt->error;
+        }
+            
+    }
+
+    public function deletaAmigos($nome){
+
+        $nome = $this->DB->real_escape_string($nome);
+        $sqlQuery = "DELETE FROM sorteio where nome = ?   ";
+        $stmt = $this->DB->prepare($sqlQuery);
+        if (!$stmt) {
+            return "Erro ao deletar dados em prepare" . $this->DB->error;
+        }
+
+        $stmt->bind_param("s", $nome);
+
+        if( $stmt->execute() ){
+            return "Amigo deletado";
+        } else {
+            return "Erro: " . $stmt->error;
+        }
+
+        $stmt->close( $this->DB );
+    }
     public function listarNomes() {
-        $sqlQuery = "SELECT nome FROM sorteio"; // Corrigido para usar a tabela correta
+
+        $sqlQuery = "SELECT nome FROM sorteio"; 
         $result = $this->DB->query($sqlQuery);
 
         $nomes = [];
@@ -48,6 +84,16 @@ class Amigo {
         $result = $stmt->get_result();
 
         return $result->num_rows > 0; 
+    }
+    
+    public function nomeExists($nome){
+        $sqlQuery = "SELECT * FROM sorteio WHERE nome = ?";
+        $stmt = $this->DB->prepare($sqlQuery);
+        $stmt->bind_param("s", $nome);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result ->num_rows > 0;
     }
 
     public function buscarAmigos($searchTerm) {
