@@ -128,28 +128,22 @@ class Amigo {
         
         return $result->fetch_assoc();
     }
-    public function buscarAmigos($nome) {
-        $nome = '%' . $this->DB->real_escape_string($nome) . '%';
-    
-        $sqlQuery = "SELECT nome, email FROM sorteio WHERE nome LIKE ?";
-    
+    public function buscarAmigos($searchTerm) {
+        $sqlQuery = "SELECT nome FROM sorteio WHERE nome LIKE ?";
         $stmt = $this->DB->prepare($sqlQuery);
-        if (!$stmt) {
-            return null; 
-        }
-    
-        $stmt->bind_param("s", $nome); 
-    
+        $searchTerm = "%$searchTerm%"; 
+        $stmt->bind_param("s", $searchTerm);
         $stmt->execute();
-    
         $result = $stmt->get_result();
     
-        $usuarios = [];
-        while ($row = $result->fetch_assoc()) {
-            $usuarios[] = $row; 
+        $nomes = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $nomes[] = $row['nome'];
+            }
         }
     
-        return $usuarios; 
+        return $nomes;
     }
     
 
