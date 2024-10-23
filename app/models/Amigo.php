@@ -7,6 +7,7 @@ class Amigo {
     }
 
     public function registrarAmigos($nome, $email) {
+        
         $sqlQuery = "INSERT INTO sorteio (NOME, EMAIL) VALUES (?, ?)";
         $stmt = $this->DB->prepare($sqlQuery);
 
@@ -23,23 +24,24 @@ class Amigo {
         }
     }
 
-    public function editarAmigos($nome, $email){
+    public function editarAmigos($nome, $email) {
+        $sqlQueryUpdate = "UPDATE sorteio SET nome = ?, email = ? WHERE nome = ?"; 
+        
 
-        $sqlQuery = "UPDATE sorteio SET nome, email = $nome, $email";
-        $stmt = $this->DB->prepare($sqlQuery);
+        $stmt = $this->DB->prepare($sqlQueryUpdate);
         if (!$stmt) {
-            return "Erro ao preparar dados para UPDATE". $this->DB->error;
+            return "Erro ao preparar dados para UPDATE: " . $this->DB->error;
         }
-        $stmt->bind_param("ss", $nome, $email);
-
+    
+        $stmt->bind_param("sss", $nome, $email, $nome); 
+    
         if ($stmt->execute()) {
             return "Amigo atualizado com sucesso";
         } else {
-            return "Erro: ". $stmt->error;
+            return "Erro: " . $stmt->error;
         }
-            
     }
-
+    
     public function deletaAmigos($nome){
 
         $nome = $this->DB->real_escape_string($nome);
@@ -57,7 +59,6 @@ class Amigo {
             return "Erro: " . $stmt->error;
         }
 
-        $stmt->close( $this->DB );
     }
     public function listarNomes() {
 
@@ -73,6 +74,23 @@ class Amigo {
         }
 
         return $nomes;
+    }
+
+    public function listarAmigos(){
+        $sqlQuery = "SELECT * FROM sorteio";
+        $result = $this->DB->query($sqlQuery);
+
+        $nomes = [];
+        $emails = [];
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $nomes[] = $row['nome'];
+            }
+        }
+
+        return $nomes ;
+
     }
 
     public function emailExists($email){
@@ -96,24 +114,47 @@ class Amigo {
         return $result ->num_rows > 0;
     }
 
-    public function buscarAmigos($searchTerm) {
-        $sqlQuery = "SELECT nome FROM sorteio WHERE nome LIKE ?";
-        $stmt = $this->DB->prepare($sqlQuery);
-        $searchTerm = "%$searchTerm%"; 
-        $stmt->bind_param("s", $searchTerm);
-        $stmt->execute();
-        $result = $stmt->get_result();
-    
-        $nomes = [];
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $nomes[] = $row['nome'];
-            }
+    public function buscarAmigoPorNome($nome) {
+        $sqlQuerySelect = "SELECT nome, email FROM sorteio WHERE nome = ? ";
+        $stmt = $this->DB->prepare($sqlQuerySelect);
+        
+        if (!$stmt) {
+            return null; 
         }
     
-        return $nomes;
+        $stmt->bind_param("s", $nome); 
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result->fetch_assoc();
+    }
+    public function buscarAmigo($nome, $email) {
+
+        $nome = '%' . $this->DB->real_escape_string($nome) . '%';
+        $email = '%' . $this->DB->real_escape_string($email) . '%';
+    
+        $sqlQuery = "SELECT nome, email FROM sorteio WHERE nome LIKE ? OR email LIKE ?";
+    
+        $stmt = $this->DB->prepare($sqlQuery);
+        if (!$stmt) {
+            return null; 
+        }
+    
+        $stmt->bind_param("ss", $nome, $email); 
+    
+        $stmt->execute();
+    
+        $result = $stmt->get_result();
+    
+        $usuarios = [];
+        while ($row = $result->fetch_assoc()) {
+            $usuarios[] = $row; 
+        }
+    
+        return $usuarios; 
     }
     
+
     public function realizarSorteio() {
         $nomes = $this->listarNomes();
     

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -23,7 +22,7 @@
                         <a class="nav-link" href="../public/Registrar.php">Registrar Amigos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../public/sorteio.php">Sortear Amigo Secreto</a>
+                        <a class="nav-link" href="../public/Sorteio.php">Sortear Amigo Secreto</a>
                     </li>
                 </ul>
             </div>
@@ -40,30 +39,34 @@
         <h2>Buscar Amigo</h2>
         <form method="GET" action="">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Digite o nome do amigo" name="search" aria-label="Nome do amigo">
+                <input type="text" class="form-control" placeholder="Digite o nome do amigo" name="search" aria-label="Nome do amigo" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                 <button class="btn btn-outline-secondary" type="submit">Buscar</button>
             </div>
-        </form>
-
-        <form method="POST" action="">
-            <button type="submit" name="sortear" class="btn btn-success mb-3">Sortear</button>
         </form>
 
         <h2>Lista de Amigos</h2>
         <ul class="list-group">
             <?php if (!empty($nomes)): ?>
-                <?php foreach ($nomes as $index => $nome): ?>
+                <?php 
+                    // Filtrando amigos pelo nome buscado
+                    $searchTerm = isset($_GET['search']) ? strtolower($_GET['search']) : '';
+                    foreach ($nomes as $index => $nome): 
+                    if ($searchTerm === '' || stripos($nome, $searchTerm) !== false): // Verifica se o nome contém o termo de busca
+                ?>
                     <li class="list-group-item <?= ($index % 2 == 0) ? 'bg-light' : 'bg-secondary'; ?>">
                         <?= htmlspecialchars($nome); ?>
                         <div class="float-end">
-                        <a href="../public/editar.php?nome=<?= urlencode($nome); ?>" class="btn btn-warning btn-sm me-1">Editar</a>
+                            <a href="../public/edit.php?nome=<?= urlencode($nome); ?>" class="btn btn-warning btn-sm me-1">Editar</a>
                             <form method="POST" action="../public/excluir.php" class="d-inline">
                                 <input type="hidden" name="nome" value="<?= htmlspecialchars($nome); ?>">
                                 <button type="submit" name="excluir" class="btn btn-danger btn-sm">Excluir</button>
                             </form>
                         </div>
                     </li>
-                <?php endforeach; ?>
+                <?php 
+                    endif; // Fim da verificação do nome
+                    endforeach; 
+                ?>
             <?php else: ?>
                 <li class="list-group-item">Nenhum nome encontrado</li>
             <?php endif; ?>

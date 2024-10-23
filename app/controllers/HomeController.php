@@ -10,30 +10,42 @@ class HomeController {
 
 
     public function listarAmigosController(){
-        $nomes = $this->model->listarNomes(); 
+        $nomes = $this->model->listarAmigos(); 
         include '../views/Home.php'; 
     }
 
     
     public function sortearAmigoController() {
         $nomes = $this->model->listarNomes(); 
-        $sorteado = null;
+        $nome = "teste";
+        $sorteados = [];
+        $message = ""; 
 
-        if (!empty($nomes)) {
-            $sorteado = $nomes[array_rand($nomes)]; 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' ) {
+            if(isset($_POST['sortear'])) {
+                if (!empty($nomes)) {
+                    $nomesEmbaralhados = $nomes;
+                    shuffle($nomesEmbaralhados);
+        
+                    for ($i = 0; $i < count($nomes); $i++) {
+                        do {
+                            $sorteado = $nomesEmbaralhados[$i % count($nomes)];
+                        } while ($sorteado === $nomes[$i]); 
+        
+                        $sorteados[$nomes[$i]] = $sorteado; 
+                    }
+                    $message = "Sorteio realizado com sucesso!";
+                } else {
+                    $message = "Nenhum amigo cadastrado para sortear.";
+                }
+                
         }
+        
     }
+    include '../views/Sortear.php';
 
-    public function realizarSorteioController() {
-        $sorteios = $this->model->realizarSorteio(); 
-    
-        if (is_string($sorteios)) {
-            $message = $sorteios;
-            include '../views/Home.php'; 
-        } else {
-            include '../views/Sorteio.php';
-        }
-    }
+}
+
     
 }
 

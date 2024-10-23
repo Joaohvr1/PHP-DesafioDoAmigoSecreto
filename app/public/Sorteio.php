@@ -1,6 +1,6 @@
 <?php
 
-    require_once '../controllers/AmigoController.php';
+    require_once '../controllers/HomeController.php';
 
     $db = new mysqli("localhost", "root", "root", "amigosecreto");
 
@@ -9,17 +9,8 @@
         die("Erro: Falha ao conectar ao banco de dados");
     }
 
-    $controller = new AmigoController($db);
-
-    $action = isset($_GET['action']) ? $_GET['action'] : 'listarAmigos';
-    switch ($action) {
-        case 'realizarSorteio':
-            $controller->realizarSorteioController();
-            break;
-        default:
-            $controller->listarAmigosController();
-            break;
-    }
+    $controller = new HomeController($db);
+    $controller->sortearAmigoController();
 
 
 ?>

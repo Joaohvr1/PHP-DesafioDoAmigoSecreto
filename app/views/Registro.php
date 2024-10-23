@@ -22,7 +22,7 @@
                         <a class="nav-link" href="#">Registrar Amigos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Sortear.php">Sortear Amigo Secreto</a>
+                        <a class="nav-link" href="../public/Sorteio.php">Sortear Amigo Secreto</a>
                     </li>
                 </ul>
             </div>
