@@ -41,15 +41,20 @@ Este projeto é um sistema de amigo secreto, onde os usuários podem cadastrar a
 ├── README.md
 ```
 ### Como Executar
-Clone o repositório:
+
+Instale o XAMPP, PHPMYADMIN ou algum outro software que consiga fazer algum servidor local de sua preferencia.
+Necessário ter um banco de dados.
+
+Clone o repositório, no caso do XAMPP é necessário instalar no local de instalação na pasta htdocs,  no meu caso C:xampp\htdocs:
 
 ```plaintext
     git clone https://github.com/Joaohvr1/PHP-DesafioDoAmigoSecreto.git
     cd PHP-DesafioDoAmigoSecreto
 ```
-  Instale o XAMPP, PHPMYADMIN ou algum outro software que consiga fazer algum servidor local de sua preferencia.
-  Necessário ter um banco de dados.
-  
+
+   
+
+
 ## Configure o banco de dados:
 
 Criando um banco de dados MySQL.
