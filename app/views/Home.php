@@ -1,14 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amigo Secreto</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -50,28 +47,24 @@
         <h2>Lista de Amigos</h2>
         <ul class="list-group">
             <?php if (!empty($nomes)): ?>
-                <?php foreach ($nomes as $index => $nome): ?>
-                    <li class="list-group-item <?= ($index % 2 == 0) ? 'bg-light' : 'bg-secondary'; ?>">
-                        <?= htmlspecialchars($nome); ?>
-                        <div class="float-end">
-                        <a href="../public/edit.php?nome=<?= urlencode($nome); ?>" class="btn btn-warning btn-sm me-1">Editar</a>
-                            <form method="POST" action="../public/excluir.php" class="d-inline">
-                                <input type="hidden" name="nome" value="<?= htmlspecialchars($nome); ?>">
-                                <button type="submit" name="excluir" class="btn btn-danger btn-sm">Excluir</button>
-                            </form>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
+                <?php foreach ($nomes as $index => $amigo): ?>
+                <li class="list-group-item <?= ($index % 2 == 0) ? 'bg-light' : 'bg-secondary'; ?>">
+                    <?= htmlspecialchars($amigo['nome']); // Acessa a chave 'nome' do array associativo ?>
+                    <div class="float-end">
+                        <a href="../public/edit.php?nome=<?= urlencode($amigo['nome']); ?>" class="btn btn-warning btn-sm me-1">Editar</a>
+                        <form method="POST" action="../public/excluir.php" class="d-inline">
+                            <input type="hidden" name="nome" value="<?= htmlspecialchars($amigo['nome']); ?>">
+                            <button type="submit" name="excluir" class="btn btn-danger btn-sm">Excluir</button>
+                        </form>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+
             <?php else: ?>
                 <li class="list-group-item">Nenhum nome encontrado</li>
             <?php endif; ?>
         </ul>
 
-        
-
     </div>
-
-    
-
 </body>
 </html>

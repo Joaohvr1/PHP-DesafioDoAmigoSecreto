@@ -115,7 +115,7 @@ class Amigo {
     }
 
     public function buscarAmigoPorNome($nome) {
-        $sqlQuerySelect = "SELECT nome, email FROM sorteio WHERE nome = ? ";
+        $sqlQuerySelect = "SELECT nome FROM sorteio WHERE nome = ? ";
         $stmt = $this->DB->prepare($sqlQuerySelect);
         
         if (!$stmt) {
@@ -128,19 +128,17 @@ class Amigo {
         
         return $result->fetch_assoc();
     }
-    public function buscarAmigo($nome, $email) {
-
+    public function buscarAmigos($nome) {
         $nome = '%' . $this->DB->real_escape_string($nome) . '%';
-        $email = '%' . $this->DB->real_escape_string($email) . '%';
     
-        $sqlQuery = "SELECT nome, email FROM sorteio WHERE nome LIKE ? OR email LIKE ?";
+        $sqlQuery = "SELECT nome, email FROM sorteio WHERE nome LIKE ?";
     
         $stmt = $this->DB->prepare($sqlQuery);
         if (!$stmt) {
             return null; 
         }
     
-        $stmt->bind_param("ss", $nome, $email); 
+        $stmt->bind_param("s", $nome); 
     
         $stmt->execute();
     

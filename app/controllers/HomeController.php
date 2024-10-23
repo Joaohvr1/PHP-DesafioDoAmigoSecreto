@@ -8,16 +8,22 @@ class HomeController {
         $this->model = new Amigo($dbConnection);
     }
 
+    public function listarAmigosController() {
+        if (isset($_GET['search'])) {
+            $searchTerm = trim($_GET['search']);
+            $nomes = $this->model->buscarAmigos($searchTerm); 
+        } else {
+            $nomes = $this->model->listarNomes();
+        }
 
-    public function listarAmigosController(){
-        $nomes = $this->model->listarAmigos(); 
-        include '../views/Home.php'; 
+        include '../views/Home.php';
     }
+
 
     
     public function sortearAmigoController() {
         $nomes = $this->model->listarNomes(); 
-        $nome = "teste";
+        $nome = "";
         $sorteados = [];
         $message = ""; 
 
